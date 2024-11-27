@@ -16,10 +16,34 @@ public class CustomerDAO extends BaseDAO {
             stmt.executeUpdate();
         }
     }
+    
+    public void updateCustomer(Customer customer) throws SQLException {
+        String query = "UPDATE Customers "
+        		+ "SET Name = ?, "
+        		+ "ContactInfo = ? "
+        		+ "WHERE CustomerID = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, customer.getName());
+            stmt.setString(2, customer.getContactInfo());
+            stmt.setInt(3, customer.getCustomerId());
+            stmt.executeUpdate();
+        }
+    }
+    
+    public void deleteCustomer(int customerId) throws SQLException {
+        String query = "DELETE FROM Customers WHERE CustomerID = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, customerId);
+            stmt.executeUpdate();
+        }
+    }
 
     // Retrieve a customer by ID
     public Customer getCustomerById(int customerId) throws SQLException {
-        String query = "SELECT * FROM Customers WHERE CustomerID = ?";
+        String query = "SELECT * FROM Customers "
+        		+ "WHERE CustomerID = ?";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, customerId);
@@ -52,4 +76,5 @@ public class CustomerDAO extends BaseDAO {
         }
         return customers;
     }
+    
 }
