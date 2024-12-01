@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Order Online - D&J's Restaurant{% endblock %}</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    {% block head %}{% endblock %}
+</head>
+<body>
+{% block content %}
+<main class="order-container">
+    <section class="order-form">
+        <h2>Place Your Order</h2>
+        <form action="/order" method="POST">
+            <div class="menu-category">
+                <h3>Appetizers</h3>
+                <label>
+                    <input type="checkbox" name="items" value="bruschetta">
+                    Bruschetta - $7.99
+                </label><br>
+                <label>
+                    <input type="checkbox" name="items" value="stuffed_mushrooms">
+                    Stuffed Mushrooms - $8.99
+                </label>
+            </div>
+
+            <div class="menu-category">
+                <h3>Main Courses</h3>
+                <label>
+                    <input type="checkbox" name="items" value="grilled_salmon">
+                    Grilled Salmon - $18.99
+                </label><br>
+                <label>
+                    <input type="checkbox" name="items" value="spaghetti_carbonara">
+                    Spaghetti Carbonara - $14.99
+                </label>
+            </div>
+
+            <div class="menu-category">
+                <h3>Desserts</h3>
+                <label>
+                    <input type="checkbox" name="items" value="tiramisu">
+                    Tiramisu - $6.99
+                </label><br>
+                <label>
+                    <input type="checkbox" name="items" value="chocolate_lava_cake">
+                    Chocolate Lava Cake - $7.99
+                </label>
+            </div>
+
+            <div class="menu-category">
+                <h3>Beverages</h3>
+                <label>
+                    <input type="checkbox" name="items" value="house_red_wine">
+                    House Red Wine - $8.00
+                </label><br>
+                <label>
+                    <input type="checkbox" name="items" value="lemonade">
+                    Lemonade - $3.50
+                </label>
+            </div>
+
+            <div class="order-details">
+                <label for="customer-name">Your Name:</label>
+                <input type="text" id="customer-name" name="customer_name" required><br>
+
+                <label for="customer-phone">Phone Number:</label>
+                <input type="tel" id="customer-phone" name="customer_phone" required><br>
+
+                <label for="customer-address">Delivery Address:</label>
+                <textarea id="customer-address" name="customer_address" rows="3" required></textarea>
+            </div>
+
+            <button type="submit">Place Order</button>
+        </form>
+    </section>
+</main>
+{% endblock %}
+</body>
+</html>
