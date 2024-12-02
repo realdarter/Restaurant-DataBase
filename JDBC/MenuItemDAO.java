@@ -78,4 +78,26 @@ public class MenuItemDAO extends BaseDAO {
         }
         return menuItems;
     }
+    
+    public boolean menuItemExists(String name) throws SQLException {
+        String query = "SELECT COUNT(*) FROM MenuItems WHERE Name = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, name);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Return true if count > 0
+            }
+        }
+        return false;
+    }
+
+    // Add menu items if they don't already exist
+    public void addMenuItemsIfNotExist(List<MenuItem> menuItems) throws SQLException {
+        for (MenuItem menuItem : menuItems) {
+            if (!menuItemExists(menuItem.getName())) {
+                addMenuItem(menuItem); // Use the existing addMenuItem method
+            }
+        }
+    }
 }
