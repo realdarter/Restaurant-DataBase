@@ -80,4 +80,15 @@ public class ReservationsDAO extends BaseDAO {
         }
         return reservations;
     }
+    
+ // Delete all reservations from the database
+    public void deleteAllReservations() throws SQLException {
+        String query = "DELETE FROM Reservations";
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement()) {
+            int rowsAffected = stmt.executeUpdate(query);
+            System.out.println("Deleted " + rowsAffected + " reservations.");
+        }
+    }
+
 }

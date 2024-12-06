@@ -101,4 +101,15 @@ public class MenuItemDAO extends BaseDAO {
             }
         }
     }
+    
+ // Delete all menu items from the database
+    public void deleteAllMenuItems() throws SQLException {
+        String query = "DELETE FROM MenuItems";
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement()) {
+            int rowsAffected = stmt.executeUpdate(query);
+            System.out.println("Deleted " + rowsAffected + " menu items.");
+        }
+    }
+
 }
