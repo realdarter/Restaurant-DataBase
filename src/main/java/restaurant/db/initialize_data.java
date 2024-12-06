@@ -40,7 +40,7 @@ public class initialize_data {
         List<Table> tables = new ArrayList<>();
         for (int i = 1; i <= 15; i++) {
             int capacity = (i % 5) + 2;  // Capacity ranges from 2 to 6
-            String status = (i % 3 == 0) ? "Reserved" : "Available";  // Every third table is reserved
+            String status = (i % 3 == 0) ? "Reserved" : "Available";  // Every third one of  table is reserved while the others are available
             tables.add(new Table(i, capacity, status));
         }
         for (Table table : tables) {
@@ -55,10 +55,20 @@ public class initialize_data {
         // Step 2: Initialize Customers (parent table for Orders and Reservations)
         List<Customer> customers = new ArrayList<>();
         for (int i = 1; i <= 15; i++) {
-            customers.add(new Customer(0, "Customer" + i, "Contact" + i + "@mail.com"));
+            // Create a new customer with a username and password
+            String username = "user" + i;  // Set a simple username
+            String password = "password" + i;  // Set a simple password (hash in real use)
+            
+            customers.add(new Customer(0, "Customer" + i, "Contact" + i + "@mail.com", username, password));
         }
+
         for (Customer customer : customers) {
             customerDAO.addCustomer(customer);
+        }
+        
+        customers = customerDAO.getAllCustomers();
+        for (Customer customer : customers) {
+        	System.out.println(customer.toString());
         }
 
         // Step 3: Initialize Menu Items (for Order Details)

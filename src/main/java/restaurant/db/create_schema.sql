@@ -7,8 +7,10 @@ CREATE TABLE IF NOT EXISTS Tables (
 
 CREATE TABLE IF NOT EXISTS Customers (
     CustomerID INT AUTO_INCREMENT PRIMARY KEY, 
+    Username VARCHAR(100) NOT NULL UNIQUE,  -- for username
     Name VARCHAR(100) NOT NULL, 
-    ContactInfo VARCHAR(255) NOT NULL
+    ContactInfo VARCHAR(255) NOT NULL, 
+    Password VARCHAR(255) NOT NULL  -- for user password
 );
 
 CREATE TABLE IF NOT EXISTS Reservations (
