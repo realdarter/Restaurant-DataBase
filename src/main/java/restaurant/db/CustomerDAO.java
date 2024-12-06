@@ -78,4 +78,15 @@ public class CustomerDAO extends BaseDAO {
         return customers;
     }
     
+    
+    public void deleteAllCustomers() throws SQLException {
+        String query = "DELETE FROM Customers";
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement()) {
+            int rowsAffected = stmt.executeUpdate(query);
+            System.out.println("Deleted " + rowsAffected + " customers.");
+        }
+    }
+
+    
 }

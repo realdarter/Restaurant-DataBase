@@ -75,4 +75,13 @@ public class TableDAO extends BaseDAO {
         }
         return tables;
     }
+    
+    public void deleteAllTables() throws SQLException {
+        String query = "DELETE FROM Tables";
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement()) {
+            int rowsAffected = stmt.executeUpdate(query);
+            System.out.println("Deleted " + rowsAffected + " tables.");
+        }
+    }
 }
