@@ -18,10 +18,12 @@
         <nav>
             <ul>
                 <li><a href="<%= request.getContextPath() %>/dashboard.jsp">Dashboard</a></li>
-                <li><a href="<%= request.getContextPath() %>/MenuServlet">Menu</a></li>
-                <li><a href="<%= request.getContextPath() %>/ReservationsServlet">Reservations</a></li>
-                <li><a href="<%= request.getContextPath() %>/about.jsp">About Us</a></li>
-                <li><a href="<%= request.getContextPath() %>/contact.jsp">Contact</a></li>
+			    <!--  <li><a href="<%= request.getContextPath() %>/menu.jsp">Menu</a></li> -->
+			    <li><a href="<%= request.getContextPath() %>/OrderServlet">Order History</a></li>
+			    <li><a href="<%= request.getContextPath() %>/MenuServlet">Menu</a></li>
+			    <li><a href="<%= request.getContextPath() %>/ReservationsServlet">Reservations</a></li>
+			    <li><a href="<%= request.getContextPath() %>/about.jsp">About Us</a></li>
+			    <li><a href="<%= request.getContextPath() %>/contact.jsp">Contact</a></li>
                 <% 
                 // Display login/logout based on session state
                 String username = (String) session.getAttribute("username");

@@ -91,51 +91,92 @@ public class initialize_data {
         menuItems.add(new MenuItem(0, "Fried Tarantulas", 12.99f, "Exotic"));
         menuItems.add(new MenuItem(0, "Century Eggs", 5.99f, "Exotic"));
         menuItems.add(new MenuItem(0, "Stinky Tofu", 8.99f, "Exotic"));
+        menuItems.add(new MenuItem(0, "Cat Meat Stew", 35.00f, "Exotic"));
+        menuItems.add(new MenuItem(0, "Deep Fried Snakes", 22.00f, "Exotic"));
+        menuItems.add(new MenuItem(0, "Roasted Bat Wings", 18.99f, "Exotic"));
+        menuItems.add(new MenuItem(0, "Boiled Dog Tail", 45.00f, "Exotic"));
+        menuItems.add(new MenuItem(0, "Fried Scorpions", 10.99f, "Exotic"));
+        menuItems.add(new MenuItem(0, "Chocolate-Covered Grasshoppers", 5.49f, "Exotic"));
+        menuItems.add(new MenuItem(0, "Caviar of Worms", 25.00f, "Exotic"));
+        menuItems.add(new MenuItem(0, "Camel Hump Steaks", 50.00f, "Exotic"));
+        menuItems.add(new MenuItem(0, "Tuna Eye Soup", 8.99f, "Exotic"));
+        menuItems.add(new MenuItem(0, "Cricket Flour Bread", 4.99f, "Exotic"));
         
         // Add each item to the menu
         for (MenuItem menuItem : menuItems) {
             menuItemDAO.addMenuItem(menuItem);
         }
 
-        // Step 4: Initialize Orders (references Customers and Tables)
+     // Step 4: Initialize Orders (multiple orders per customer)
         customers = customerDAO.getAllCustomers();
         tables = tableDAO.getAllTables();
         List<Order> orders = new ArrayList<>();
-        for (int i = 0; i < 15; i++) {
-            LocalDateTime orderTime = LocalDateTime.of(2024, 12, i + 1, 12, 0, 0, 0);
-            orders.add(new Order(0, customers.get(i).getCustomerId(), tables.get(i).getTableID(), orderTime));
+
+        // Create multiple orders for each customer
+        for (int i = 0; i < customers.size(); i++) {
+            // Each customer gets 2 orders (this can be customized)
+            for (int j = 0; j < 2; j++) {
+                LocalDateTime orderTime = LocalDateTime.of(2024, 12, j + 1, 12, 0, 0, 0);  // Create orders on different days
+                orders.add(new Order(0, customers.get(i).getCustomerId(), tables.get(i % tables.size()).getTableID(), orderTime));
+            }
         }
 
         // Insert Orders and capture generated OrderIDs
         for (Order order : orders) {
             orderDAO.addOrder(order); 
-            
         }
         orders = orderDAO.getAllOrders();
         for (Order order : orders) {
-        	System.out.println("Order in system with OrderID: " + order.getOrderID());
+            System.out.println("Order in system with OrderID: " + order.getOrderID());
+        }
+
+        // Step 5: Initialize Order Details (multiple items per order)
+        menuItems = menuItemDAO.getAllMenuItems();
+        orders = orderDAO.getAllOrders();
+        List<OrderDetail> orderDetails = new ArrayList<>();  // Empty list to hold order details
+
+        // Populate the orderDetails list by creating multiple OrderDetail instances for each order
+        for (int i = 0; i < orders.size(); i++) {
+            int orderID = orders.get(i).getOrderID();  // Assigning the orderID for the current Order
+            System.out.println("Adding OrderDetails for OrderID: " + orderID);
             
+            // For each order, add multiple order details (items)
+            for (int j = 0; j < 3; j++) {  // Each order gets 3 items (this can be customized)
+                MenuItem item = menuItems.get((i + j) % menuItems.size());  // Get a menu item in a cyclic manner
+                OrderDetail orderDetail = new OrderDetail(0, orderID, item.getItemID(), 2);  // Quantity set to 2 for each item
+                orderDetails.add(orderDetail);
+            }
+        }
+
+        // Insert the populated OrderDetails into the database
+        for (OrderDetail detail : orderDetails) {
+            orderDetailsDAO.addOrderDetail(detail);  // Adding the order detail to the database
+            System.out.println("Inserted OrderDetail with ItemID: " + detail.getItemID() + ", OrderDetailID: " + detail.getOrderDetailID());
         }
         
         
-     // Step 5: Initialize Order Details (references Orders and MenuItems)
+        // Step 5: Initialize Order Details (references Orders and MenuItems)
         menuItems = menuItemDAO.getAllMenuItems();
         orders = orderDAO.getAllOrders();
-        List<OrderDetail> orderDetails = new ArrayList<>();
+        orderDetails = new ArrayList<>();  // Empty list to hold order details
+
+        // Populate the orderDetails list by creating OrderDetail instances for each menu item
         for (int i = 0; i < menuItems.size(); i++) {
-            int orderID = orders.get(i % orders.size()).getOrderID();  
+            int orderID = orders.get(i % orders.size()).getOrderID();  // Assigning the orderID for the current Order
             System.out.println("Adding OrderDetail for MenuItem ID: " + menuItems.get(i).getItemID() + " for OrderID: " + orderID);
+            
+            // Create a new OrderDetail instance
             OrderDetail orderDetail = new OrderDetail(0, orderID, menuItems.get(i).getItemID(), 2);  // (ID, OrderID, ItemID, Quantity)
+            
+            // Add the OrderDetail to the list
             orderDetails.add(orderDetail);
         }
 
-        // Insert OrderDetails
+        // Insert the populated OrderDetails into the database
         for (OrderDetail detail : orderDetails) {
-            orderDetailsDAO.addOrderDetail(detail);  
+            orderDetailsDAO.addOrderDetail(detail);  // Adding the order detail to the database
             System.out.println("Inserted OrderDetail with ItemID: " + detail.getItemID() + ", OrderDetailID: " + detail.getOrderDetailID());
         }
-
-
 
         // Step 6: Initialize Reservations (references Customers and Tables)
         List<Reservation> reservations = new ArrayList<>();
@@ -147,7 +188,6 @@ public class initialize_data {
         for (Reservation reservation : reservations) {
             reservationDAO.addReservation(reservation);
         }
-
 
         System.out.println("All data initialized successfully.");
     }

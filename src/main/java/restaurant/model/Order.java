@@ -1,58 +1,93 @@
 package restaurant.model;
 
+import restaurant.db.MenuItemDAO;
+
+import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Order {
+    private int orderID;
+    private int customerID;
+    private int tableID;
+    private LocalDateTime orderTime;
+    private List<OrderDetail> orderDetails;
+    
+    // Instance of MenuItemDAO to fetch MenuItem by itemID
+    private MenuItemDAO menuItemDAO;
 
-    private int OrderID;
-    private int CustomerID;
-    private int TableID;
-    private LocalDateTime OrderTime;
-
-    // Constructor to initialize the order
-    public Order(int OrderID, int CustomerID, int TableID, LocalDateTime OrderTime) {
-        this.OrderID = OrderID;
-        this.CustomerID = CustomerID;
-        this.TableID = TableID;
-        this.OrderTime = OrderTime;
+    // Constructor
+    public Order(int orderID, int customerID, int tableID, LocalDateTime orderTime) {
+        this.orderID = orderID;
+        this.customerID = customerID;
+        this.tableID = tableID;
+        this.orderTime = orderTime;
+        this.orderDetails = new ArrayList<>();
+        this.menuItemDAO = new MenuItemDAO(); // Instantiate the DAO
     }
 
-    // Getter and Setters
+    // Constructor with orderDetails
+    public Order(int orderID, int customerID, int tableID, LocalDateTime orderTime, List<OrderDetail> orderDetails) {
+        this.orderID = orderID;
+        this.customerID = customerID;
+        this.tableID = tableID;
+        this.orderTime = orderTime;
+        this.orderDetails = orderDetails;
+        this.menuItemDAO = new MenuItemDAO();
+    }
+
+    // Getters and Setters
     public int getOrderID() {
-        return OrderID;
+        return orderID;
     }
 
-    public void setOrderID(int OrderID) {
-        this.OrderID = OrderID;
+    public void setOrderID(int orderID) {
+        this.orderID = orderID;
     }
 
     public int getCustomerID() {
-        return CustomerID;
+        return customerID;
     }
 
-    public void setCustomerID(int CustomerID) {
-        this.CustomerID = CustomerID;
+    public void setCustomerID(int customerID) {
+        this.customerID = customerID;
     }
 
     public int getTableID() {
-        return TableID;
+        return tableID;
     }
 
-    public void setTableID(int TableID) {
-        this.TableID = TableID;
+    public void setTableID(int tableID) {
+        this.tableID = tableID;
     }
 
     public LocalDateTime getOrderTime() {
-        return OrderTime;
+        return orderTime;
     }
 
-    public void setOrderTime(LocalDateTime OrderTime) {
-        this.OrderTime = OrderTime;
+    public void setOrderTime(LocalDateTime orderTime) {
+        this.orderTime = orderTime;
     }
 
-    @Override
-    public String toString() {
-        return "Order [OrderID=" + OrderID + ", CustomerID=" + CustomerID + ", TableID=" + TableID + ", OrderTime=" + OrderTime + "]";
+    public List<OrderDetail> getOrderDetails() {
+        return orderDetails;
     }
 
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
+    }
+
+    // Add a method to retrieve the names of items in the order
+    public List<String> getItems() throws SQLException {
+        List<String> itemNames = new ArrayList<>();
+        for (OrderDetail detail : orderDetails) {
+            // Fetch the MenuItem using itemID from the MenuItemDAO
+            MenuItem item = menuItemDAO.getMenuItemById(detail.getItemID());
+            if (item != null) {
+                itemNames.add(item.getName());  // Add the name of the MenuItem
+            }
+        }
+        return itemNames;
+    }
 }

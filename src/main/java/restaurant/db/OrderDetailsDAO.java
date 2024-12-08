@@ -1,5 +1,6 @@
 package restaurant.db;
 
+import restaurant.model.Order;
 import restaurant.model.OrderDetail;
 import java.sql.*;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class OrderDetailsDAO extends BaseDAO {
             }
         }
     }
+
 
     // Update an existing order detail
     public void updateOrderDetail(OrderDetail orderDetail) throws SQLException {
