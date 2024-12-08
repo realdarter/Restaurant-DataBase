@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import restaurant.db.ReservationsDAO;
@@ -45,9 +46,24 @@ public class ReservationsServlet extends HttpServlet {
         }
 
         try {
-            // Fetch current reservations
+            // Fetch all reservations
             List<Reservation> reservations = reservationDAO.getAllReservations();
-            request.setAttribute("reservations", reservations);  // Pass reservations to JSP
+
+            // Separate the user's reservations from others' reservations
+            List<Reservation> userReservations = new ArrayList<>();
+            List<Reservation> otherReservations = new ArrayList<>();
+
+            for (Reservation reservation : reservations) {
+                if (reservation.getCustomerID() == userID) {
+                    userReservations.add(reservation);
+                } else {
+                    otherReservations.add(reservation);
+                }
+            }
+
+            // Pass both lists to the JSP
+            request.setAttribute("userReservations", userReservations);   // Current user's reservations
+            request.setAttribute("otherReservations", otherReservations); // Other users' reservations
 
             // Fetch available tables for the whole day
             List<Table> availableTables = tableDAO.getAvailableTables();
@@ -63,6 +79,16 @@ public class ReservationsServlet extends HttpServlet {
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Retrieve the userID from session
+        HttpSession session = request.getSession();
+        Integer userID = (Integer) session.getAttribute("userID");
+
+        // If user is not logged in, redirect to login page
+        if (userID == null) {
+            response.sendRedirect("login.jsp");
+            return;  // Exit the method, do not continue
+        }
+
         // Retrieve form parameters
         String reservationDateString = request.getParameter("reservation_date");  // Format: yyyy-MM-dd
         String reservationTimeString = request.getParameter("reservation_time");  // Format: HH:mm
@@ -71,23 +97,18 @@ public class ReservationsServlet extends HttpServlet {
         LocalDateTime reservationDateTime = LocalDateTime.of(reservationDate, reservationTime);
         
         int tableId = Integer.parseInt(request.getParameter("table_id"));  // Get selected table ID from the form
-        
-        // Get the customer ID from the session
-        HttpSession session = request.getSession();
-        Integer userID = (Integer) session.getAttribute("customerID");
-        
+
         // Create a new Reservation object
         Reservation reservation = new Reservation(0, userID, tableId, reservationDateTime);
 
         try {
             // Save the reservation to the database
             reservationDAO.addReservation(reservation);
-            response.sendRedirect("reservations"); // Redirect to the reservation list page
+            response.sendRedirect("ReservationsServlet"); // Redirect to the reservation list page
         } catch (SQLException e) {
             e.printStackTrace();
             throw new ServletException("Error processing reservation", e);
         }
     }
+
 }
-
-

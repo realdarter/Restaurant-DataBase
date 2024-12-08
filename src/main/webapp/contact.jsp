@@ -1,12 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to D&J's Restaurant Dashboard</title>
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/static/styles.css"> 
+    <title>Contact Us - D&J's Restaurant</title>
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/static/styles.css">
 </head>
 <body>
 <header>
@@ -35,30 +34,40 @@
         </nav>
     </div>
 </header>
-<main>
-    <h1>Welcome to the Dashboard!</h1>
 
-    <%
-        // Retrieve the username from the session
-        if (username != null) {
-    %>
-        <p>Hello, <strong><%= username %></strong>! We're glad to have you here.</p>
-    <%
-        } else {
-    %>
-        <p>Hello, Guest! Please <a href="login.jsp">log in</a> to access your account.</p>
-    <%
-        }
-    %>
-    <img src="<%= request.getContextPath() %>/static/images/yellow-dragon-nailong.gif" alt="D&J's Restaurant Nailong">
+<main>
+    <section id="contact-form">
+        <h2>Contact Us</h2>
+        <p>If you have any questions, feel free to reach out to us using the contact form below:</p>
+        
+        <form action="<%= request.getContextPath() %>/ContactServlet" method="POST">
+            <label for="name">Your Name:</label><br>
+            <input type="text" id="name" name="name" required><br><br>
+            
+            <label for="email">Your Email:</label><br>
+            <input type="email" id="email" name="email" required><br><br>
+            
+            <label for="message">Your Message:</label><br>
+            <textarea id="message" name="message" rows="4" required></textarea><br><br>
+            
+            <button type="submit">Send Message</button>
+        </form>
+    </section>
+
+    <section id="contact-info">
+        <h2>Our Contact Information</h2>
+        <p>If you prefer, you can contact us directly using the following details:</p>
+        <p>
+            <strong>Location:</strong>  1 Washington Sq, San Jose, CA 95192 <br>
+            <strong>Phone:</strong> (888) 888 - 8888 <br>
+            <strong>Email:</strong> D&J@restaurant.com
+        </p>
+    </section>
 </main>
+
 <footer>
     <p>&copy; 2024 D&J's Restaurant. All Rights Not Reserved.</p>
-    <p>Follow us on:
-        <a href="#">Facebook</a> |
-        <a href="#">Instagram</a> |
-        <a href="#">Twitter</a>
-    </p>
 </footer>
+
 </body>
 </html>

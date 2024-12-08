@@ -90,16 +90,16 @@ main {
 h1 {
     font-size: 2.5rem;
     margin-bottom: 20px;
-    color: #2C3E50; /* Darker header text */
+    color: #2C3E50; 
 }
 
 p {
     font-size: 1.2rem;
-    color: #555; /* Softer text for paragraphs */
+    color: #555;
 }
 
 strong {
-    color: #1abc9c; /* Soft teal for emphasis */
+    color: #1abc9c; 
 }
 
 /* Menu Specific Styles */
@@ -130,23 +130,35 @@ strong {
 .menu-category ul {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .menu-category ul li {
     margin-bottom: 10px;
     color: #555;
     display: flex; /* Use flexbox to align items */
-    justify-content: space-between; /* Space between name and price */
+    justify-content: space-between; /* Space between name, price and category */
+    align-items: center; /* Vertically center the items */
 }
 
 .menu-category ul li .item-name {
     color: #2C3E50; /* Darker text for menu items */
+    flex: 2; /* Allow name to take up more space */
 }
 
 .price {
     color: #1abc9c; /* Teal for prices */
     font-weight: bold;
-    text-align: right; /* Align price to the right */
+    text-align: center; /* Center the price */
+    width: 100px; /* Fixed width for price column */
+    margin-left: 10px; /* Add some space between the item name and price */
+    display: inline-block; /* Treat price as block level for centering */
+}
+
+/* Optional: Make sure the category name has enough space for styling */
+.category {
+    font-size: 14px;
+    color: #888;
 }
 
 

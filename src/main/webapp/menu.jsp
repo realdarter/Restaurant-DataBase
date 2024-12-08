@@ -18,8 +18,19 @@
         <nav>
             <ul>
                 <li><a href="<%= request.getContextPath() %>/dashboard.jsp">Dashboard</a></li>
+                <li><a href="<%= request.getContextPath() %>/MenuServlet">Menu</a></li>
+                <li><a href="<%= request.getContextPath() %>/ReservationsServlet">Reservations</a></li>
                 <li><a href="<%= request.getContextPath() %>/about.jsp">About Us</a></li>
                 <li><a href="<%= request.getContextPath() %>/contact.jsp">Contact</a></li>
+                <% 
+                // Display login/logout based on session state
+                String username = (String) session.getAttribute("username");
+                if (username != null) { 
+                %>
+                    <li><a href="<%= request.getContextPath() %>/logout">Logout</a></li>
+                <% } else { %>
+                    <li><a href="<%= request.getContextPath() %>/login.jsp">Login</a></li>
+                <% } %>
             </ul>
         </nav>
     </div>
@@ -29,26 +40,40 @@
     <section class="menu">
         <h2>Our Menu</h2>
 
-        <!-- Loop through menu items dynamically using Java -->
+        <!-- Search and Sort Form -->
+        <form action="<%= request.getContextPath() %>/MenuServlet" method="get">
+		    <input type="text" name="search" placeholder="Search for a dish..."
+		           value="<%= request.getParameter("search") != null ? request.getParameter("search") : "" %>">
+		    <button type="submit">Search</button>
+
+            <select name="sortBy" onchange="this.form.submit()">
+                <option value="">Sort By</option>
+                <option value="price" <%= "price".equals(request.getParameter("sortBy")) ? "selected" : "" %>>Price</option>
+                <option value="category" <%= "category".equals(request.getParameter("sortBy")) ? "selected" : "" %>>Category</option>
+            </select>
+        </form>
+
+        <!-- Display Menu Items -->
         <div class="menu-category">
-		<% 
-		    List<restaurant.model.MenuItem> menuItems = (List<restaurant.model.MenuItem>) request.getAttribute("menuItems");
-		    if (menuItems != null && !menuItems.isEmpty()) {
-		        for (restaurant.model.MenuItem item : menuItems) {
-		%>
-		        <ul>
-		            <li>
-		                <span class="item-name"><%= item.getName() %></span>
-		                <span class="price">$<%= item.getPrice() %></span>
-		            </li>
-		        </ul>
-		<% 
-		        }
-		    } else { 
-		%>
-		        <p>No menu items available at the moment.</p>
-		<% } %>
-		</div>
+            <% 
+            List<restaurant.model.MenuItem> menuItems = (List<restaurant.model.MenuItem>) request.getAttribute("menuItems");
+            if (menuItems != null && !menuItems.isEmpty()) {
+                for (restaurant.model.MenuItem item : menuItems) {
+            %>
+                <ul>
+                    <li>
+                        <span class="item-name"><%= item.getName() %></span>
+                        <span class="price">$<%= item.getPrice() %></span>
+                        <span class="category"><%= item.getCategory() %></span>
+                    </li>
+                </ul>
+            <% 
+                }
+            } else { 
+            %>
+                <p>No menu items available at the moment.</p>
+            <% } %>
+        </div>
     </section>
 </main>
 

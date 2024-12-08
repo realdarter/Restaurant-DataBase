@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.List, java.time.LocalDate, restaurant.model.Reservation, restaurant.model.Table" %>
+<%@ page import="java.util.List, restaurant.model.Reservation, restaurant.model.Table" %>
 <%@ page import="restaurant.db.ReservationsDAO, restaurant.db.TableDAO" %>
+<%@ page import="java.time.LocalDate" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -19,20 +20,22 @@
         </div>
         <nav>
             <ul>
-                <li><a href="<%= request.getContextPath() %>/MenuServlet">Menu</a></li>
-                <li><a href="<%= request.getContextPath() %>/ReservationsServlet">Reservations</a></li>
-                <li><a href="<%= request.getContextPath() %>/about.jsp">About Us</a></li>
-                <li><a href="<%= request.getContextPath() %>/contact.jsp">Contact</a></li>
-                <% 
-                // Display login/logout based on session state
-                String username = (String) session.getAttribute("username");
-                if (username != null) { 
-                %>
-                    <li><a href="<%= request.getContextPath() %>/logout.jsp">Logout</a></li>
-                <% } else { %>
-                    <li><a href="<%= request.getContextPath() %>/login.jsp">Login</a></li>
-                <% } %>
-            </ul>
+			    <li><a href="<%= request.getContextPath() %>/dashboard.jsp">Dashboard</a></li>
+			    <!--  <li><a href="<%= request.getContextPath() %>/menu.jsp">Menu</a></li> -->
+			    <li><a href="<%= request.getContextPath() %>/MenuServlet">Menu</a></li>
+			    <li><a href="<%= request.getContextPath() %>/ReservationsServlet">Reservations</a></li>
+			    <li><a href="<%= request.getContextPath() %>/about.jsp">About Us</a></li>
+			    <li><a href="<%= request.getContextPath() %>/contact.jsp">Contact</a></li>
+			    <% 
+			    // Display login/logout based on session state
+			    String username = (String) session.getAttribute("username");
+			    if (username != null) { 
+			    %>
+			        <li><a href="<%= request.getContextPath() %>/logout">Logout</a></li>
+			    <% } else { %>
+			        <li><a href="<%= request.getContextPath() %>/login.jsp">Login</a></li>
+			    <% } %>
+			</ul>
         </nav>
     </div>
 </header>
@@ -40,7 +43,7 @@
 <main class="reservation-page-container">
     <section class="reservation-form-container">
         <h2>Make a Reservation</h2>
-        <form action="reservations" method="POST">
+        <form action="ReservationsServlet" method="POST">
             <label for="reservation-date">Date:</label>
             <input type="date" id="reservation-date" name="reservation_date" value="<%= LocalDate.now() %>" required><br>
 
@@ -70,18 +73,18 @@
         </form>
     </section>
 
+    <!-- User's Reservations -->
     <section class="existing-reservations-container">
-        <h2>Current Reservations on List</h2>
+        <h2>Your Reservations</h2>
         <% 
             // Fetch the list of reservations for the current user
-            List<Reservation> reservations = (List<Reservation>) request.getAttribute("reservations");
-            if (reservations != null && !reservations.isEmpty()) {
+            List<Reservation> userReservations = (List<Reservation>) request.getAttribute("userReservations");
+            if (userReservations != null && !userReservations.isEmpty()) {
         %>
             <ul>
-            <% for (Reservation reservation : reservations) { %>
+            <% for (Reservation reservation : userReservations) { %>
                 <li>
-                    <%= reservation.getReservationDate() %> at <%= reservation.getReservationTime() %> - 
-                    Table <%= reservation.getTableID() %>
+                    <%= reservation.getReservationTime() %> - Table <%= reservation.getTableID() %>
                 </li>
             <% } %>
             </ul>
@@ -89,7 +92,33 @@
             <p>You have no reservations.</p>
         <% } %>
     </section>
+
+    <!-- Other Users' Reservations -->
+    <section class="existing-reservations-container">
+        <h2>Other Reservations</h2>
+        <% 
+            // Fetch the list of other users' reservations
+            List<Reservation> otherReservations = (List<Reservation>) request.getAttribute("otherReservations");
+            if (otherReservations != null && !otherReservations.isEmpty()) {
+        %>
+            <ul>
+            <% for (Reservation reservation : otherReservations) { %>
+                <li>
+                    <%= reservation.getReservationTime() %> - Table <%= reservation.getTableID() %>
+                </li>
+            <% } %>
+            </ul>
+        <% } else { %>
+            <p>No reservations from others.</p>
+        <% } %>
+    </section>
 </main>
 
+</body>
+</main>
+
+<footer>
+    <p>&copy; 2024 D&J's Restaurant. All Rights Not Reserved.</p>
+</footer>
 </body>
 </html>
