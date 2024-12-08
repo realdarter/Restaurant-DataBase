@@ -58,6 +58,25 @@ public class TableDAO extends BaseDAO {
         return null;
     }
 
+    public List<Table> getAvailableTables() throws SQLException {
+        List<Table> tables = new ArrayList<>();
+        String query = "SELECT * FROM Tables WHERE Status = 'available'";  // Assuming status is 'available' for tables that are not reserved
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                tables.add(new Table(
+                        rs.getInt("TableID"),
+                        rs.getInt("Capacity"),
+                        rs.getString("Status")
+                ));
+            }
+        }
+        return tables;
+    }
+    
     // Get all tables
     public List<Table> getAllTables() throws SQLException {
         List<Table> tables = new ArrayList<>();

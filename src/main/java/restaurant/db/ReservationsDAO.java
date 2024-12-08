@@ -2,7 +2,9 @@ package restaurant.db;
 
 
 import restaurant.model.Reservation;
+
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,6 +64,52 @@ public class ReservationsDAO extends BaseDAO {
         return null;
     }
 
+    // Get all reservations for a specific date
+    public List<Reservation> getReservationsByDate(LocalDate date) throws SQLException {
+        List<Reservation> reservations = new ArrayList<>();
+        String query = "SELECT * FROM Reservations WHERE DATE(ReservationTime) = ?";  // Using SQL DATE() function to compare only the date part
+        
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setDate(1, Date.valueOf(date));  // Convert LocalDate to SQL Date
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                reservations.add(new Reservation(
+                        rs.getInt("ReservationID"),
+                        rs.getInt("CustomerID"),
+                        rs.getInt("TableID"),
+                        rs.getTimestamp("ReservationTime").toLocalDateTime()  // Convert Timestamp to LocalDateTime
+                ));
+            }
+        }
+        return reservations;
+    }
+    
+
+    
+    public List<Reservation> getReservationsByCustomerId(int customerId) throws SQLException {
+        List<Reservation> reservations = new ArrayList<>();
+        String query = "SELECT * FROM Reservations WHERE CustomerID = ?";
+        
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, customerId);
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                reservations.add(new Reservation(
+                        rs.getInt("ReservationID"),
+                        rs.getInt("CustomerID"),
+                        rs.getInt("TableID"),
+                        rs.getTimestamp("ReservationTime").toLocalDateTime()  // Convert Timestamp to LocalDateTime
+                ));
+            }
+        }
+        return reservations;
+    }
+
+    
     // Get all reservations
     public List<Reservation> getAllReservations() throws SQLException {
         List<Reservation> reservations = new ArrayList<>();
@@ -90,5 +138,6 @@ public class ReservationsDAO extends BaseDAO {
             System.out.println("Deleted " + rowsAffected + " reservations.");
         }
     }
+    
 
 }
