@@ -1,5 +1,6 @@
 package restaurant.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Reservation {
@@ -48,6 +49,10 @@ public class Reservation {
 
     public void setReservationTime(LocalDateTime ReservationTime) {
         this.ReservationTime = ReservationTime;
+    }
+    
+    public LocalDate getReservationDate() {
+        return ReservationTime.toLocalDate();
     }
 
     @Override
