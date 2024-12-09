@@ -52,7 +52,65 @@ git clone https://github.com/realdarter/Restaurant-DataBase
    - Choose **Apache Tomcat v9.x** and set the Tomcat installation path.
    - Add your project to the server by selecting your project and clicking **Add**.
 
-#### **Step 5: Run Schema Creation**
+
+### Step 5: Configure Database Connection in Code
+
+Before running the project, you need to ensure that your Java code can connect to the MySQL database properly. This is done in the **DatabaseConnection class**.
+
+#### **Steps to Configure the Database Connection:**
+
+1. **Create/Modify the `DatabaseConnection.java` Class:**
+   - This class is responsible for establishing a connection between your Java backend and MySQL database using JDBC.
+   
+   Example code for **DatabaseConnection.java**:
+
+   ```java
+   package restaurant;
+
+   import java.sql.Connection;
+   import java.sql.DriverManager;
+   import java.sql.SQLException;
+
+   public class DatabaseConnection {
+       // Database credentials and URL
+       private static final String DB_URL = "jdbc:mysql://localhost:3306/restaurant_system"; // Replace with your DB name
+       private static final String USER = "root"; // Replace with your MySQL username
+       private static final String PASSWORD = "student"; // Replace with your MySQL password
+
+       // Method to get the database connection
+       public static Connection getConnection() throws SQLException {
+           try {
+               // Load the MySQL JDBC driver
+               Class.forName("com.mysql.cj.jdbc.Driver");
+               // Establish and return the connection
+               return DriverManager.getConnection(DB_URL, USER, PASSWORD);
+           } catch (ClassNotFoundException | SQLException e) {
+               // Handle exceptions and print a message
+               throw new SQLException("Connection failed.", e);
+           }
+       }
+   }
+   ```
+
+2. **Explanation:**
+   - **DB_URL:** This is the URL of your MySQL server along with the database name. For example, `"jdbc:mysql://localhost:3306/restaurant_system"`. Replace `restaurant_system` with the actual name of your database.
+   - **USER and PASSWORD:** These are your MySQL credentials. In the example, the username is `"root"` and the password is `"student"`. Update these to match your MySQL server credentials.
+   - The `getConnection()` method loads the MySQL JDBC driver and uses `DriverManager.getConnection()` to establish a connection to the database.
+
+3. **Using the `DatabaseConnection` Class:**
+   - Anywhere in your Java application where you need a connection to the database, you can call:
+     ```java
+     Connection conn = DatabaseConnection.getConnection();
+     ```
+   - This will provide a live connection to the MySQL database that you can use for executing SQL queries.
+
+#### **Important Notes:**
+- **Ensure the MySQL JDBC Driver is added** to your project as mentioned in Step 3 (adding `mysql-connector-java-x.x.x.jar` to your project's build path).
+- **Match the MySQL database URL, username, and password** in this file with your actual MySQL setup.
+
+Once this class is correctly set up and the MySQL JDBC driver is included, your application should be able to connect to the database without any issues.
+
+#### **Step 6: Run Schema Creation**
 
 1. **Run `dbcreate_schema.java`:**
    - In the `src/main/java/restaurant/dbcreate_schema.java` file, this class is responsible for creating the required tables in the MySQL database. Running this Java class will ensure the proper setup of the schema.
@@ -61,7 +119,7 @@ git clone https://github.com/realdarter/Restaurant-DataBase
      - It not only creates the tables if they don't exist but also removes any previously created tables before rebuilding them.
      - This ensures that the schema is always fresh and matches the latest structure.
 
-#### **Step 6: Initialize Data**
+#### **Step 7: Initialize Data**
 
 1. **Run `initialize_data.java`:**
    - After running `dbcreate_schema.java`, run the `initialize_data.java` class to populate the tables with sample data. This class adds 15+ items into each table (e.g., 15 customers, 15 menu items) to make the system operational for testing.
@@ -73,7 +131,7 @@ git clone https://github.com/realdarter/Restaurant-DataBase
    
    - After running this Java class, the database will have 15+ entries for each table, ready for testing.
 
-#### **Step 7: Deploy and Run the Application**
+#### **Step 8: Deploy and Run the Application**
 
 1. **Start Tomcat in Eclipse:**
    - Open the **Servers** tab, right-click your Tomcat server, and select **Start**.
@@ -82,7 +140,7 @@ git clone https://github.com/realdarter/Restaurant-DataBase
    - Right-click the project > **Run As** > **Run on Server**.
    - The application should now be available at `http://localhost:8080/your-project-name` in your browser.
 
-#### **Step 8: Test the Features**
+#### **Step 9: Test the Features**
 
 - **Customer Testing:** Test creating accounts, making reservations, placing orders, and managing profiles.
 - **Staff Testing:** Test reservation management, table status updates, and order processing.
