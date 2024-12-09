@@ -45,6 +45,63 @@ public class ReservationsServlet extends HttpServlet {
             return;
         }
 
+        // Handle deletion of reservation
+        String deleteIdStr = request.getParameter("delete");
+        if (deleteIdStr != null) {
+            int reservationId = Integer.parseInt(deleteIdStr);
+            try {
+                Reservation reservation = reservationDAO.getReservationByID(reservationId);
+                if (reservation != null && reservation.getCustomerID() == userID) {
+                    reservationDAO.deleteReservation(reservationId);  // Delete the reservation
+                    response.sendRedirect("ReservationsServlet");  // Redirect to refresh the reservation list
+                    return;
+                } else {
+                    // If reservation doesn't belong to the user, you can show an error or redirect
+                    response.sendRedirect("ReservationsServlet");
+                    return;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new ServletException("Error deleting reservation", e);
+            }
+        }
+
+        // Handle editing of reservation
+        String editIdStr = request.getParameter("edit");
+        if (editIdStr != null) {
+            int reservationId = Integer.parseInt(editIdStr);
+            try {
+                Reservation reservation = reservationDAO.getReservationByID(reservationId);
+                
+                // Check if the reservation is null
+                if (reservation == null) {
+                    System.out.println("Reservation not found for ID: " + reservationId);
+                    request.setAttribute("message", "Reservation not found.");
+                    request.getRequestDispatcher("/error.jsp").forward(request, response);
+                    return;
+                }
+                
+                // Check if the reservation belongs to the current user
+                if (reservation.getCustomerID() == userID) {
+                    // Set session and request attributes
+                    session.setAttribute("reservationID", reservationId);
+                    List<Table> availableTables = tableDAO.getAvailableTables();
+                    request.setAttribute("availableTables", availableTables);
+                    request.setAttribute("reservation", reservation);
+                    
+                    // Forward to the edit page
+                    System.out.println("Sending to editReservation.jsp");
+                    request.getRequestDispatcher("/editReservation.jsp").forward(request, response);
+                } else {
+                    response.sendRedirect("ReservationsServlet");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new ServletException("Error fetching reservation for edit", e);
+            }
+
+        }
+
         try {
             // Fetch all reservations
             List<Reservation> reservations = reservationDAO.getAllReservations();
@@ -77,7 +134,6 @@ public class ReservationsServlet extends HttpServlet {
         }
     }
 
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Retrieve the userID from session
         HttpSession session = request.getSession();
@@ -89,7 +145,9 @@ public class ReservationsServlet extends HttpServlet {
             return;  // Exit the method, do not continue
         }
 
-        // Retrieve form parameters
+        // Retrieve form parameters for creating or updating a reservation
+        String reservationIdString = request.getParameter("reservation_id");  // For editing, optional
+        int reservationId = (reservationIdString != null) ? Integer.parseInt(reservationIdString) : 0; // 0 for new reservations
         String reservationDateString = request.getParameter("reservation_date");  // Format: yyyy-MM-dd
         String reservationTimeString = request.getParameter("reservation_time");  // Format: HH:mm
         LocalDate reservationDate = LocalDate.parse(reservationDateString);
@@ -99,16 +157,20 @@ public class ReservationsServlet extends HttpServlet {
         int tableId = Integer.parseInt(request.getParameter("table_id"));  // Get selected table ID from the form
 
         // Create a new Reservation object
-        Reservation reservation = new Reservation(0, userID, tableId, reservationDateTime);
+        Reservation reservation = new Reservation(reservationId, userID, tableId, reservationDateTime);
 
         try {
-            // Save the reservation to the database
-            reservationDAO.addReservation(reservation);
+            if (reservationId == 0) {
+                // Save the reservation to the database if it's a new reservation
+                reservationDAO.addReservation(reservation);
+            } else {
+                // Update the reservation if reservationId is not 0
+                reservationDAO.updateReservation(reservation);
+            }
             response.sendRedirect("ReservationsServlet"); // Redirect to the reservation list page
         } catch (SQLException e) {
             e.printStackTrace();
             throw new ServletException("Error processing reservation", e);
         }
     }
-
 }

@@ -9,220 +9,265 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f0f4f7; /* Light background */
+    background-color: #f0f4f7;
     color: #333;
     line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 3.0rem;
 }
 
 h1, h2, h3 {
-    color: #34495E; /* Darker text for headings */
+    color: #2C3E50;
 }
 
 a {
-    color: #3498db; /* Soft blue for links */
+    color: #3498db;
     text-decoration: none;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
 }
 
 a:hover {
     text-decoration: underline;
+    color: #16a085;
 }
 
 /* Header */
 header {
-    background-color: #ecf0f1; /* Light header background */
+    background-color: #ecf0f1;
     color: #34495E;
-    padding: 10px 0;
+    padding: 0.625rem 0;
     position: fixed;
     width: 100%;
     top: 0;
-    left: 0;
     z-index: 100;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .header-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px;
+    max-width: 75rem;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 1.25rem;
 }
 
 .logo img {
-    height: 50px;
+    height: 3.125rem;
 }
 
 nav ul {
     list-style: none;
     display: flex;
-    gap: 20px;
-}
-
-nav ul li {
-    display: inline;
+    gap: 1.25rem;
 }
 
 nav ul li a {
     color: #34495E;
     font-weight: bold;
-    padding: 10px;
-    transition: background-color 0.3s ease;
+    padding: 0.625rem;
+    transition: background-color 0.3s ease, border-radius 0.3s ease;
 }
 
 nav ul li a:hover {
-    background-color: #bdc3c7; /* Light gray on hover */
-    border-radius: 4px;
+    background-color: #bdc3c7;
+    border-radius: 0.25rem;
 }
 
 /* Main Content */
 main {
-    margin-top: 80px; /* Space for fixed header */
-    padding: 20px;
-    max-width: 1200px;
+    margin-top: 5rem;
+    padding: 10.00rem;
+    max-width: 87.5rem;
     margin-left: auto;
     margin-right: auto;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
 h1 {
     font-size: 2.5rem;
-    margin-bottom: 20px;
-    color: #2C3E50; 
+    margin-bottom: 1.25rem;
 }
 
 p {
-    font-size: 1.2rem;
+    font-size: 1.125rem;
     color: #555;
 }
 
 strong {
-    color: #1abc9c; 
+    color: #1abc9c;
 }
 
-/* Menu Specific Styles */
-.menu-container {
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+.login-container, .register-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 10rem); 
+    padding: 2rem; 
+    gap: 2rem; 
 }
 
-.menu-container h2 {
+.login-form, .register-form {
+    width: 100%;
+    max-width: 28rem;
+    background-color: #ffffff;
+    padding: 2.5rem; 
+    border-radius: 1rem; 
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+    text-align: left; 
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem; 
+}
+
+form label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #2C3E50;
+    margin-bottom: 0.5rem;
+}
+
+form input, form select {
+    width: 100%;
+    padding: 0.875rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem; 
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+form input:focus, form select:focus {
+    border-color: #148f77;
+    box-shadow: 0 0 6px rgba(20, 143, 119, 0.4);
+}
+
+form button {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 1.125rem;
+    font-weight: bold;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    background-color: #148f77;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+form button:hover {
+    background-color: #117a65;
+    box-shadow: 0 3px 6px rgba(17, 122, 101, 0.3);
+}
+
+/* Section Titles */
+.login-form h1, .register-form h2 {
+    font-size: 1.8rem;
+    color: #34495E;
     text-align: center;
-    margin-bottom: 20px;
-    color: #34495E; /* Darker text for menu headers */
+    margin-bottom: 1rem;
+}
+
+.login-form p, .register-form p {
+    font-size: 1rem;
+    color: #555;
+    text-align: center;
+}
+
+.error-message {
+    color: #e74c3c;
+    font-size: 1rem;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Menu */
+/* Menu */
+.menu-container {
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .menu-category {
-    margin-bottom: 20px;
+    margin-top: 1rem;
 }
 
-.menu-category h3 {
-    color: #1abc9c; /* Soft teal for category headers */
-    border-bottom: 2px solid #ddd;
-    padding-bottom: 5px;
-    margin-bottom: 10px;
+.menu-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #ddd;
+    font-size: 1.125rem;
+    align-items: center;
 }
 
-.menu-category ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.menu-category ul li {
-    margin-bottom: 10px;
-    color: #555;
-    display: flex; /* Use flexbox to align items */
-    justify-content: space-between; /* Space between name, price and category */
-    align-items: center; /* Vertically center the items */
-}
-
-.menu-category ul li .item-name {
-    color: #2C3E50; /* Darker text for menu items */
-    flex: 2; /* Allow name to take up more space */
-}
-
-.price {
-    color: #1abc9c; /* Teal for prices */
+.menu-item .name {
     font-weight: bold;
-    text-align: center; /* Center the price */
-    width: 100px; /* Fixed width for price column */
-    margin-left: 10px; /* Add some space between the item name and price */
-    display: inline-block; /* Treat price as block level for centering */
+    color: #2C3E50; 
+    flex: 1; 
 }
 
-/* Optional: Make sure the category name has enough space for styling */
-.category {
-    font-size: 14px;
-    color: #888;
+.menu-item .category {
+    font-size: 1rem;
+    color: #16a085; 
+    flex: 1; 
+    text-align: center; 
+}
+
+.menu-item .price {
+    font-size: 1.125rem;
+    color: #d4817b;
+    font-weight: bold;
+    text-align: right; 
+}
+
+/* Menu Category */
+.menu-category h3 {
+    color: #1abc9c;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 0.3125rem;
+    margin-bottom: 0.625rem;
+    font-size: 1.5rem;
 }
 
 
 /* Footer */
 footer {
-    background-color: #ecf0f1; /* Light footer background */
+    background-color: #ecf0f1;
     color: #34495E;
     text-align: center;
-    padding: 20px 0;
-    margin-top: 40px;
+    padding: 1.25rem 0;
+    margin-top: 2.5rem;
 }
 
 footer p {
     font-size: 1rem;
 }
 
-footer a {
-    color: #3498db;
-    text-decoration: none;
-}
-
-footer a:hover {
-    color: #16a085; /* Teal on hover */
-}
-
 /* Responsive Design */
 @media (max-width: 768px) {
-    .header-container {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    nav ul {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    nav ul li a {
-        font-size: 1.2rem;
-    }
-
-    h1 {
-        font-size: 2rem;
-    }
-
-    .menu-container {
-        padding: 15px;
+    .login-form, .register-form {
+        max-width: 90%;
+        padding: 1.5rem;
     }
 }
 
 @media (max-width: 480px) {
-    h1 {
-        font-size: 1.8rem;
+    .login-form h1, .register-form h2 {
+        font-size: 1.5rem;
     }
 
-    p {
+    form button {
         font-size: 1rem;
-    }
-
-    nav ul li a {
-        font-size: 1rem;
-    }
-
-    .menu-category ul li {
-        font-size: 0.9rem;
     }
 }

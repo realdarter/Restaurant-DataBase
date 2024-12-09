@@ -22,6 +22,7 @@
                 <li><a href="<%= request.getContextPath() %>/dashboard.jsp">Dashboard</a></li>
                 <li><a href="<%= request.getContextPath() %>/MenuServlet">Menu</a></li>
                 <li><a href="<%= request.getContextPath() %>/OrderServlet">Orders</a></li>
+                <li><a href="<%= request.getContextPath() %>/CustomizeUserServlet">Profile</a></li>
                 <li><a href="<%= request.getContextPath() %>/logout">Logout</a></li>
             </ul>
         </nav>

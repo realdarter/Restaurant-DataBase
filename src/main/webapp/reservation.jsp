@@ -75,24 +75,26 @@
     </section>
 
     <!-- User's Reservations -->
-    <section class="existing-reservations-container">
-        <h2>Your Reservations</h2>
-        <% 
-            // Fetch the list of reservations for the current user
-            List<Reservation> userReservations = (List<Reservation>) request.getAttribute("userReservations");
-            if (userReservations != null && !userReservations.isEmpty()) {
-        %>
-            <ul>
-            <% for (Reservation reservation : userReservations) { %>
-                <li>
-                    <%= reservation.getReservationTime() %> - Table <%= reservation.getTableID() %>
-                </li>
-            <% } %>
-            </ul>
-        <% } else { %>
-            <p>You have no reservations.</p>
-        <% } %>
-    </section>
+	<section class="existing-reservations-container">
+	    <h2>Your Reservations</h2>
+	    <% 
+	        List<Reservation> userReservations = (List<Reservation>) request.getAttribute("userReservations");
+	        if (userReservations != null && !userReservations.isEmpty()) {
+	    %>
+	        <ul>
+	        <% for (Reservation reservation : userReservations) { %>
+	            <li>
+	                <%= reservation.getReservationTime() %> - Table <%= reservation.getTableID() %>
+	                <a href="<%= request.getContextPath() %>/ReservationsServlet?delete=<%= reservation.getReservationID() %>">Delete</a>
+	                <a href="<%= request.getContextPath() %>/ReservationsServlet?edit=<%= reservation.getReservationID() %>">Edit</a>
+	            </li>
+	        <% } %>
+	        </ul>
+	    <% } else { %>
+	        <p>You have no reservations.</p>
+	    <% } %>
+	</section>
+
 
     <!-- Other Users' Reservations -->
     <section class="existing-reservations-container">

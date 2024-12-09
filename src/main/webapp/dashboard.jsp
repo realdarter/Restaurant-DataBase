@@ -23,6 +23,7 @@
 			    <li><a href="<%= request.getContextPath() %>/ReservationsServlet">Reservations</a></li>
 			    <li><a href="<%= request.getContextPath() %>/about.jsp">About Us</a></li>
 			    <li><a href="<%= request.getContextPath() %>/contact.jsp">Contact</a></li>
+			    <li><a href="<%= request.getContextPath() %>/CustomizeUserServlet">Profile</a></li>
 			    <% 
 			    // Display login/logout based on session state
 			    String username = (String) session.getAttribute("username");

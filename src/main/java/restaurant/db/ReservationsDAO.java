@@ -23,7 +23,7 @@ public class ReservationsDAO extends BaseDAO {
     }
 
     // Update an existing reservation
-    public void updateReservation(Reservation reservation) throws SQLException {
+    public static void updateReservation(Reservation reservation) throws SQLException {
         String query = "UPDATE Reservations SET CustomerID = ?, TableID = ?, ReservationTime = ? WHERE ReservationID = ?";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -46,7 +46,7 @@ public class ReservationsDAO extends BaseDAO {
     }
 
     // Retrieve a reservation by ID
-    public Reservation getReservationById(int reservationID) throws SQLException {
+    public static Reservation getReservationByID(int reservationID) throws SQLException {
         String query = "SELECT * FROM Reservations WHERE ReservationID = ?";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -63,6 +63,8 @@ public class ReservationsDAO extends BaseDAO {
         }
         return null;
     }
+    
+    
 
     // Get all reservations for a specific date
     public List<Reservation> getReservationsByDate(LocalDate date) throws SQLException {
@@ -108,7 +110,6 @@ public class ReservationsDAO extends BaseDAO {
         }
         return reservations;
     }
-
     
     // Get all reservations
     public List<Reservation> getAllReservations() throws SQLException {

@@ -11,7 +11,7 @@ public class BaseDAO {
     protected static final String USER = "root";
     protected static final String PASSWORD = "student";
     
-    protected Connection getConnection() throws SQLException {
+    protected static Connection getConnection() throws SQLException {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {

@@ -15,7 +15,7 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Servlet implementation class MenuServlet
+ * MenuServlet stuff
  */
 @WebServlet("/MenuServlet")
 public class MenuServlet extends HttpServlet {
@@ -24,59 +24,61 @@ public class MenuServlet extends HttpServlet {
     private MenuItemDAO menuItemDAO;
 
     /**
-     * @see HttpServlet#HttpServlet()
+     * Constructor, duh
      */
     public MenuServlet() {
         super();
-        menuItemDAO = new MenuItemDAO();
+        menuItemDAO = new MenuItemDAO();  // Yeah, making the DAO
     }
 
     /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     * Handles the GET request, obviously
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            // Fetch all menu items from the database
+            // Get menu items from the database, if any
             List<MenuItem> menuItems = menuItemDAO.getAllMenuItems();
 
             if (menuItems == null || menuItems.isEmpty()) {
-                System.out.println("No menu items fetched from the database.");
+                System.out.println("No menu items... okay?");
             }
 
-            // Handle sorting based on query parameter
+            // Sorting by price or category? If there's a parameter for that, do it
             String sortBy = request.getParameter("sortBy");
             if (sortBy != null) {
                 switch (sortBy) {
                     case "price":
-                        Collections.sort(menuItems, Comparator.comparingDouble(MenuItem::getPrice));
+                        Collections.sort(menuItems, Comparator.comparingDouble(MenuItem::getPrice));  // Sorting by price, obviously
                         break;
                     case "category":
-                        Collections.sort(menuItems, Comparator.comparing(MenuItem::getCategory));
+                        Collections.sort(menuItems, Comparator.comparing(MenuItem::getCategory));  // Sorting by category
                         break;
+                    // No default handling, keep it simple
                 }
             }
 
-            // Handle searching based on query parameter
+            // Searching through items... check if search query exists
             String searchQuery = request.getParameter("search");
             if (searchQuery != null && !searchQuery.trim().isEmpty()) {
-                menuItems.removeIf(item -> !item.getName().toLowerCase().contains(searchQuery.toLowerCase()));
+                menuItems.removeIf(item -> !item.getName().toLowerCase().contains(searchQuery.toLowerCase()));  // Remove if name doesn't match search
             }
 
-            // Pass menu items to JSP
+            // Set the list of items to the request
             request.setAttribute("menuItems", menuItems);
 
-            // Forward request to menu.jsp
+            // Send to menu.jsp, hopefully it'll work
             request.getRequestDispatcher("/menu.jsp").forward(request, response);
 
         } catch (SQLException e) {
-            throw new ServletException("Database error while retrieving menu items", e);
+            // If there’s a DB issue, just throw an error
+            throw new ServletException("DB problem while fetching menu items", e);
         }
     }
 
     /**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+     * POST handler just calls GET, whatever
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
+        doGet(request, response);  // Reusing GET code, lazy way but works
     }
 }

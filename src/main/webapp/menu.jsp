@@ -24,6 +24,7 @@
 			    <li><a href="<%= request.getContextPath() %>/ReservationsServlet">Reservations</a></li>
 			    <li><a href="<%= request.getContextPath() %>/about.jsp">About Us</a></li>
 			    <li><a href="<%= request.getContextPath() %>/contact.jsp">Contact</a></li>
+			    <li><a href="<%= request.getContextPath() %>/CustomizeUserServlet">Profile</a></li>
                 <% 
                 // Display login/logout based on session state
                 String username = (String) session.getAttribute("username");
@@ -44,9 +45,9 @@
 
         <!-- Search and Sort Form -->
         <form action="<%= request.getContextPath() %>/MenuServlet" method="get">
-		    <input type="text" name="search" placeholder="Search for a dish..."
-		           value="<%= request.getParameter("search") != null ? request.getParameter("search") : "" %>">
-		    <button type="submit">Search</button>
+            <input type="text" name="search" placeholder="Search for a dish..."
+                   value="<%= request.getParameter("search") != null ? request.getParameter("search") : "" %>">
+            <button type="submit">Search</button>
 
             <select name="sortBy" onchange="this.form.submit()">
                 <option value="">Sort By</option>
@@ -62,13 +63,11 @@
             if (menuItems != null && !menuItems.isEmpty()) {
                 for (restaurant.model.MenuItem item : menuItems) {
             %>
-                <ul>
-                    <li>
-                        <span class="item-name"><%= item.getName() %></span>
-                        <span class="price">$<%= item.getPrice() %></span>
-                        <span class="category"><%= item.getCategory() %></span>
-                    </li>
-                </ul>
+                <div class="menu-item">
+                    <span class="name"><%= item.getName() %></span>
+                    <span class="price">$<%= item.getPrice() %></span>
+                    <span class="category"><%= item.getCategory() %></span>
+                </div>
             <% 
                 }
             } else { 
@@ -78,6 +77,7 @@
         </div>
     </section>
 </main>
+
 
 <footer>
     <p>&copy; 2024 D&J's Restaurant. All Rights Not Reserved.</p>
