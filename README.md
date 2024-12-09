@@ -73,9 +73,9 @@ Before running the project, you need to ensure that your Java code can connect t
 
    public class DatabaseConnection {
        // Database credentials and URL
-       private static final String DB_URL = "jdbc:mysql://localhost:3306/restaurant_system"; // Replace with your DB name
-       private static final String USER = "root"; // Replace with your MySQL username
-       private static final String PASSWORD = "student"; // Replace with your MySQL password
+       private static final String DB_URL = "jdbc:mysql://localhost:3306/restaurant_system"; // replace here
+       private static final String USER = "root"; // replace here
+       private static final String PASSWORD = "student";  //replace here
 
        // Method to get the database connection
        public static Connection getConnection() throws SQLException {
