@@ -15,6 +15,7 @@ git clone https://github.com/realdarter/Restaurant-DataBase
 ```
 
 FYI the main files are build and src which should be under an eclipse project for a web application.
+![image](https://github.com/user-attachments/assets/aa550d2e-6978-4294-abec-9c4b45fcce45)
 
 #### **Step 2: Set Up the MySQL Database**
 
